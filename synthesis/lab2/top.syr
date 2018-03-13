@@ -3,14 +3,14 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 --> Parameter TMPDIR set to xst/projnav.tmp
 
 
-Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.14 secs
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.09 secs
  
 --> Parameter xsthdpdir set to xst
 
 
-Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.16 secs
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.09 secs
  
 --> Reading design: top.prj
 
@@ -189,6 +189,7 @@ INFO:Xst:3210 - "C:\Users\Damjan\Desktop\git\lab2\source\rtl\vhdl\top.vhd" line 
 WARNING:Xst:653 - Signal <pixel_address> is used but never assigned. This sourceless signal will be automatically connected to value GND.
 WARNING:Xst:653 - Signal <pixel_value> is used but never assigned. This sourceless signal will be automatically connected to value GND.
 WARNING:Xst:653 - Signal <pixel_we> is used but never assigned. This sourceless signal will be automatically connected to value GND.
+    Found 1024x6-bit Read Only RAM for signal <_n0248>
     Found 11-bit comparator greater for signal <n0007> created at line 254
     Found 11-bit comparator greater for signal <n0010> created at line 255
     Found 11-bit comparator greater for signal <n0014> created at line 256
@@ -213,6 +214,7 @@ WARNING:Xst:653 - Signal <pixel_we> is used but never assigned. This sourceless 
     Found 11-bit comparator greater for signal <n0116> created at line 301
     Found 11-bit comparator lessequal for signal <n0121> created at line 302
     Summary:
+	inferred   1 RAM(s).
 	inferred  23 Comparator(s).
 	inferred  29 Multiplexer(s).
 Unit <top> synthesized.
@@ -368,7 +370,8 @@ Unit <graphics_mem> synthesized.
 HDL Synthesis Report
 
 Macro Statistics
-# RAMs                                                 : 1
+# RAMs                                                 : 2
+ 1024x6-bit single-port Read Only RAM                  : 1
  4800x6-bit dual-port RAM                              : 1
 # Multipliers                                          : 1
  11x11-bit multiplier                                  : 1
@@ -429,6 +432,20 @@ INFO:Xst:3226 - The RAM <Mram_text_mem> will be implemented as a BLOCK RAM, abso
     -----------------------------------------------------------------------
 Unit <text_mem> synthesized (advanced).
 
+Synthesizing (advanced) Unit <top>.
+INFO:Xst:3218 - HDL ADVISOR - The RAM <Mram__n0248> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 1024-word x 6-bit                   |          |
+    |     weA            | connected to signal <GND>           | high     |
+    |     addrA          | connected to signal <char_address<9:0>> |          |
+    |     diA            | connected to signal <GND>           |          |
+    |     doA            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+Unit <top> synthesized (advanced).
+
 Synthesizing (advanced) Unit <vga_sync>.
 The following registers are absorbed into counter <h_count_r>: 1 register on signal <h_count_r>.
 The following registers are absorbed into counter <v_count_r>: 1 register on signal <v_count_r>.
@@ -442,7 +459,8 @@ Unit <vga_top> synthesized (advanced).
 Advanced HDL Synthesis Report
 
 Macro Statistics
-# RAMs                                                 : 1
+# RAMs                                                 : 2
+ 1024x6-bit single-port distributed Read Only RAM      : 1
  4800x6-bit dual-port block RAM                        : 1
 # MACs                                                 : 1
  8x7-to-14-bit MAC                                     : 1
@@ -511,17 +529,17 @@ Top Level Output File Name         : top.ngc
 
 Primitive and Black Box Usage:
 ------------------------------
-# BELS                             : 122
+# BELS                             : 152
 #      GND                         : 2
 #      INV                         : 5
 #      LUT1                        : 18
-#      LUT2                        : 5
+#      LUT2                        : 8
 #      LUT3                        : 8
 #      LUT4                        : 7
-#      LUT5                        : 8
-#      LUT6                        : 28
+#      LUT5                        : 15
+#      LUT6                        : 46
 #      MUXCY                       : 18
-#      MUXF7                       : 1
+#      MUXF7                       : 3
 #      VCC                         : 2
 #      XORCY                       : 20
 # FlipFlops/Latches                : 36
@@ -554,16 +572,16 @@ Selected Device : 6slx45fgg676-2
 
 Slice Logic Utilization: 
  Number of Slice Registers:              36  out of  54576     0%  
- Number of Slice LUTs:                   80  out of  27288     0%  
-    Number used as Logic:                79  out of  27288     0%  
+ Number of Slice LUTs:                  108  out of  27288     0%  
+    Number used as Logic:               107  out of  27288     0%  
     Number used as Memory:                1  out of   6408     0%  
        Number used as SRL:                1
 
 Slice Logic Distribution: 
- Number of LUT Flip Flop pairs used:     94
-   Number with an unused Flip Flop:      58  out of     94    61%  
-   Number with an unused LUT:            14  out of     94    14%  
-   Number of fully used LUT-FF pairs:    22  out of     94    23%  
+ Number of LUT Flip Flop pairs used:    132
+   Number with an unused Flip Flop:      96  out of    132    72%  
+   Number with an unused LUT:            24  out of    132    18%  
+   Number of fully used LUT-FF pairs:    12  out of    132     9%  
    Number of unique control sets:         8
 
 IO Utilization: 
@@ -608,7 +626,7 @@ Timing Summary:
 ---------------
 Speed Grade: -2
 
-   Minimum period: 9.513ns (Maximum Frequency: 105.120MHz)
+   Minimum period: 10.269ns (Maximum Frequency: 97.385MHz)
    Minimum input arrival time before clock: 3.404ns
    Maximum output required time after clock: 4.618ns
    Maximum combinational path delay: No path found
@@ -619,27 +637,33 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clk_i'
-  Clock period: 9.513ns (frequency: 105.120MHz)
-  Total number of paths / destination ports: 3909 / 153
+  Clock period: 10.269ns (frequency: 97.385MHz)
+  Total number of paths / destination ports: 10654 / 171
 -------------------------------------------------------------------------
-Delay:               10.274ns (Levels of Logic = 3)
-  Source:            vga_top_i/vga_i/vga_sync_i/v_count_r_8 (FF)
+Delay:               11.090ns (Levels of Logic = 9)
+  Source:            vga_top_i/vga_i/vga_sync_i/v_count_r_0 (FF)
   Destination:       vga_top_i/text_mem_i/Mram_text_mem1 (RAM)
   Source Clock:      clk_i rising 0.9X
   Destination Clock: clk_i rising 0.9X
 
-  Data Path: vga_top_i/vga_i/vga_sync_i/v_count_r_8 to vga_top_i/text_mem_i/Mram_text_mem1
+  Data Path: vga_top_i/vga_i/vga_sync_i/v_count_r_0 to vga_top_i/text_mem_i/Mram_text_mem1
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDRE:C->Q             8   0.525   0.943  vga_top_i/vga_i/vga_sync_i/v_count_r_8 (vga_top_i/vga_i/vga_sync_i/v_count_r_8)
-     DSP48A1:B4->P13      13   5.145   1.206  vga_top_i/Maddsub_n0103 (vga_top_i/txt_rom_addr_c<13>)
-     LUT2:I0->O            1   0.250   0.790  vga_top_i/text_mem_i/Mmux_index13_SW0 (N0)
-     LUT6:I4->O            3   0.250   0.765  vga_top_i/text_mem_i/Mmux_index13 (vga_top_i/text_mem_i/index<9>)
-     RAMB16BWER:ADDRB10        0.400          vga_top_i/text_mem_i/Mram_text_mem1
+     FDRE:C->Q             3   0.525   1.196  vga_top_i/vga_i/vga_sync_i/v_count_r_0 (vga_top_i/vga_i/vga_sync_i/v_count_r_0)
+     LUT5:I0->O            1   0.254   0.682  Mmux_char_address102_SW0 (N0)
+     LUT6:I5->O            6   0.254   0.876  Mmux_char_address102 (Mmux_char_address102)
+     LUT5:I4->O            8   0.254   0.944  dir_pixel_column[10]_GND_5_o_AND_148_o21 (dir_pixel_column[10]_GND_5_o_AND_148_o2)
+     LUT6:I5->O            8   0.254   0.944  dir_pixel_column[10]_GND_5_o_AND_148_o (dir_pixel_column[10]_GND_5_o_AND_148_o)
+     LUT6:I5->O           18   0.254   1.235  char_address<4>1_1 (char_address<4>1)
+     LUT3:I2->O            1   0.254   0.682  Mram__n02488113 (Mram__n02482112)
+     LUT6:I5->O            2   0.254   0.834  Mram__n02482114 (Mram__n02482113)
+     LUT6:I4->O            1   0.250   0.000  Mram__n02482117_F (N13)
+     MUXF7:I0->O           1   0.163   0.681  Mram__n02482117 (char_value<0>)
+     RAMB16BWER:DIA0           0.300          vga_top_i/text_mem_i/Mram_text_mem1
     ----------------------------------------
-    Total                     10.274ns (6.570ns logic, 3.704ns route)
-                                       (63.9% logic, 36.1% route)
+    Total                     11.090ns (3.016ns logic, 8.074ns route)
+                                       (27.2% logic, 72.8% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clk_i'
@@ -690,20 +714,20 @@ Clock to Setup on destination clock clk_i
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-clk_i          |   10.274|         |         |         |
+clk_i          |   11.090|         |         |         |
 ---------------+---------+---------+---------+---------+
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 6.00 secs
-Total CPU time to Xst completion: 6.49 secs
+Total REAL time to Xst completion: 7.00 secs
+Total CPU time to Xst completion: 6.51 secs
  
 --> 
 
-Total memory usage is 296664 kilobytes
+Total memory usage is 296048 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   19 (   0 filtered)
-Number of infos    :    5 (   0 filtered)
+Number of infos    :    6 (   0 filtered)
 
