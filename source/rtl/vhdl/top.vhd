@@ -172,7 +172,7 @@ begin
   display_mode     <= "01";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
   
   font_size        <= x"1";
-  show_frame       <= '1';
+  show_frame       <= '0';
   foreground_color <= x"FFFFFF";
   background_color <= x"000000";
   frame_color      <= x"FF0000";
