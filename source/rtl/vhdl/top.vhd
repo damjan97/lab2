@@ -251,6 +251,33 @@ begin
   --dir_green
   --dir_blue
  
+   dir_red <= 	X"FF"   when (dir_pixel_column <= 1*(H_RES/8)) else
+					X"CC"   when (dir_pixel_column > 1*(H_RES/8)) and (dir_pixel_column <= 2*(H_RES/8)) else
+					X"00"   when (dir_pixel_column > 2*(H_RES/8)) and (dir_pixel_column <= 3*(H_RES/8)) else
+					X"00"   when (dir_pixel_column > 3*(H_RES/8)) and (dir_pixel_column <= 4*(H_RES/8)) else
+					X"CC"   when (dir_pixel_column > 4*(H_RES/8)) and (dir_pixel_column <= 5*(H_RES/8)) else
+					X"FF"   when (dir_pixel_column > 5*(H_RES/8)) and (dir_pixel_column <= 6*(H_RES/8)) else
+					X"00"   when (dir_pixel_column > 6*(H_RES/8)) and (dir_pixel_column <= 7*(H_RES/8)) else
+					X"00";
+ 
+ dir_green <= 	X"FF"   when (dir_pixel_column <= 1*(H_RES/8)) else
+					X"CC"   when (dir_pixel_column > 1*(H_RES/8)) and (dir_pixel_column <= 2*(H_RES/8)) else
+					X"CC"   when (dir_pixel_column > 2*(H_RES/8)) and (dir_pixel_column <= 3*(H_RES/8)) else
+					X"CC"   when (dir_pixel_column > 3*(H_RES/8)) and (dir_pixel_column <= 4*(H_RES/8)) else
+					X"00"   when (dir_pixel_column > 4*(H_RES/8)) and (dir_pixel_column <= 5*(H_RES/8)) else
+					X"00"   when (dir_pixel_column > 5*(H_RES/8)) and (dir_pixel_column <= 6*(H_RES/8)) else
+					X"00"   when (dir_pixel_column > 6*(H_RES/8)) and (dir_pixel_column <= 7*(H_RES/8)) else
+					X"00";					
+					
+ dir_blue <= 	X"FF"   when (dir_pixel_column <= 1*(H_RES/8)) else
+					X"00"   when (dir_pixel_column > 1*(H_RES/8)) and (dir_pixel_column <= 2*(H_RES/8)) else
+					X"CC"   when (dir_pixel_column > 2*(H_RES/8)) and (dir_pixel_column <= 3*(H_RES/8)) else
+					X"00"   when (dir_pixel_column > 3*(H_RES/8)) and (dir_pixel_column <= 4*(H_RES/8)) else
+					X"CC"   when (dir_pixel_column > 4*(H_RES/8)) and (dir_pixel_column <= 5*(H_RES/8)) else
+					X"00"   when (dir_pixel_column > 5*(H_RES/8)) and (dir_pixel_column <= 6*(H_RES/8)) else
+					X"FF"   when (dir_pixel_column > 6*(H_RES/8)) and (dir_pixel_column <= 7*(H_RES/8)) else
+					X"00";
+ 
   -- koristeci signale realizovati logiku koja pise po TXT_MEM
   --char_address
   --char_value
