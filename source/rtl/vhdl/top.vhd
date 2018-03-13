@@ -168,8 +168,8 @@ begin
   graphics_lenght <= conv_std_logic_vector(MEM_SIZE*8*8, GRAPH_MEM_ADDR_WIDTH);
   
   -- removed to inputs pin
-  direct_mode <= '1';
-  display_mode     <= "10";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
+  direct_mode <= '0';
+  display_mode     <= "01";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
   
   font_size        <= x"1";
   show_frame       <= '1';
@@ -282,6 +282,43 @@ begin
   --char_address
   --char_value
   --char_we
+  
+  char_we <= '1';
+  
+  char_address <= conv_std_logic_vector(1, MEM_ADDR_WIDTH) when (dir_pixel_column <= 7 and dir_pixel_column > 0) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(2, MEM_ADDR_WIDTH) when (dir_pixel_column <= 15 and dir_pixel_column > 7) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(3, MEM_ADDR_WIDTH) when (dir_pixel_column <= 23 and dir_pixel_column > 15) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(4, MEM_ADDR_WIDTH) when (dir_pixel_column <= 31 and dir_pixel_column > 23) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(5, MEM_ADDR_WIDTH) when (dir_pixel_column <= 39 and dir_pixel_column > 31) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(6, MEM_ADDR_WIDTH) when (dir_pixel_column <= 47 and dir_pixel_column > 39) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(7, MEM_ADDR_WIDTH) when (dir_pixel_column <= 55 and dir_pixel_column > 47) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(8, MEM_ADDR_WIDTH) when (dir_pixel_column <= 63 and dir_pixel_column > 55) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(9, MEM_ADDR_WIDTH) when (dir_pixel_column <= 71 and dir_pixel_column > 63) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(10, MEM_ADDR_WIDTH) when (dir_pixel_column <= 79 and dir_pixel_column > 71) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(11, MEM_ADDR_WIDTH) when (dir_pixel_column <= 87 and dir_pixel_column > 79) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(12, MEM_ADDR_WIDTH) when (dir_pixel_column <= 95 and dir_pixel_column > 87) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(13, MEM_ADDR_WIDTH) when (dir_pixel_column <= 103 and dir_pixel_column > 95) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(14, MEM_ADDR_WIDTH) when (dir_pixel_column <= 111 and dir_pixel_column > 103) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(15, MEM_ADDR_WIDTH) when (dir_pixel_column <= 119 and dir_pixel_column > 111) and (dir_pixel_row = (V_RES/2)) else
+						conv_std_logic_vector(0, MEM_ADDR_WIDTH);
+						
+  
+  char_value <= 	o"04" when char_address = conv_std_logic_vector(1, MEM_ADDR_WIDTH) else
+						o"01" when char_address = conv_std_logic_vector(2, MEM_ADDR_WIDTH) else
+						o"15" when char_address = conv_std_logic_vector(3, MEM_ADDR_WIDTH) else
+						o"12" when char_address = conv_std_logic_vector(4, MEM_ADDR_WIDTH) else
+						o"01" when char_address = conv_std_logic_vector(5, MEM_ADDR_WIDTH) else
+						o"16" when char_address = conv_std_logic_vector(6, MEM_ADDR_WIDTH) else
+						o"40" when char_address = conv_std_logic_vector(7, MEM_ADDR_WIDTH) else
+						o"07" when char_address = conv_std_logic_vector(8, MEM_ADDR_WIDTH) else
+						o"14" when char_address = conv_std_logic_vector(9, MEM_ADDR_WIDTH) else
+						o"01" when char_address = conv_std_logic_vector(10, MEM_ADDR_WIDTH) else
+						o"15" when char_address = conv_std_logic_vector(11, MEM_ADDR_WIDTH) else
+						o"17" when char_address = conv_std_logic_vector(12, MEM_ADDR_WIDTH) else
+						o"03" when char_address = conv_std_logic_vector(13, MEM_ADDR_WIDTH) else
+						o"11" when char_address = conv_std_logic_vector(14, MEM_ADDR_WIDTH) else
+						o"03" when char_address = conv_std_logic_vector(15, MEM_ADDR_WIDTH) else
+						o"40";
   
   -- koristeci signale realizovati logiku koja pise po GRAPH_MEM
   --pixel_address
