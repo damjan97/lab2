@@ -285,39 +285,39 @@ begin
   
   char_we <= '1';
   
-  char_address <= conv_std_logic_vector(501, MEM_ADDR_WIDTH) when (dir_pixel_column <= 7 and dir_pixel_column > 0) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(502, MEM_ADDR_WIDTH) when (dir_pixel_column <= 15 and dir_pixel_column > 7) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(503, MEM_ADDR_WIDTH) when (dir_pixel_column <= 23 and dir_pixel_column > 15) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(504, MEM_ADDR_WIDTH) when (dir_pixel_column <= 31 and dir_pixel_column > 23) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(505, MEM_ADDR_WIDTH) when (dir_pixel_column <= 39 and dir_pixel_column > 31) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(506, MEM_ADDR_WIDTH) when (dir_pixel_column <= 47 and dir_pixel_column > 39) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(507, MEM_ADDR_WIDTH) when (dir_pixel_column <= 55 and dir_pixel_column > 47) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(508, MEM_ADDR_WIDTH) when (dir_pixel_column <= 63 and dir_pixel_column > 55) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(509, MEM_ADDR_WIDTH) when (dir_pixel_column <= 71 and dir_pixel_column > 63) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(510, MEM_ADDR_WIDTH) when (dir_pixel_column <= 79 and dir_pixel_column > 71) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(511, MEM_ADDR_WIDTH) when (dir_pixel_column <= 87 and dir_pixel_column > 79) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(512, MEM_ADDR_WIDTH) when (dir_pixel_column <= 95 and dir_pixel_column > 87) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(513, MEM_ADDR_WIDTH) when (dir_pixel_column <= 103 and dir_pixel_column > 95) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(514, MEM_ADDR_WIDTH) when (dir_pixel_column <= 111 and dir_pixel_column > 103) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(515, MEM_ADDR_WIDTH) when (dir_pixel_column <= 119 and dir_pixel_column > 111) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(0, MEM_ADDR_WIDTH);
+  char_address <= conv_std_logic_vector(495, MEM_ADDR_WIDTH) when (dir_pixel_column <= 7 and dir_pixel_column > 0) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(496, MEM_ADDR_WIDTH) when (dir_pixel_column <= 15 and dir_pixel_column > 7) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(497, MEM_ADDR_WIDTH) when (dir_pixel_column <= 23 and dir_pixel_column > 15) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(498, MEM_ADDR_WIDTH) when (dir_pixel_column <= 31 and dir_pixel_column > 23) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(499, MEM_ADDR_WIDTH) when (dir_pixel_column <= 39 and dir_pixel_column > 31) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(500, MEM_ADDR_WIDTH) when (dir_pixel_column <= 47 and dir_pixel_column > 39) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(501, MEM_ADDR_WIDTH) when (dir_pixel_column <= 55 and dir_pixel_column > 47) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(502, MEM_ADDR_WIDTH) when (dir_pixel_column <= 63 and dir_pixel_column > 55) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(503, MEM_ADDR_WIDTH) when (dir_pixel_column <= 71 and dir_pixel_column > 63) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(504, MEM_ADDR_WIDTH) when (dir_pixel_column <= 79 and dir_pixel_column > 71) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(505, MEM_ADDR_WIDTH) when (dir_pixel_column <= 87 and dir_pixel_column > 79) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(506, MEM_ADDR_WIDTH) when (dir_pixel_column <= 95 and dir_pixel_column > 87) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(507, MEM_ADDR_WIDTH) when (dir_pixel_column <= 103 and dir_pixel_column > 95) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(508, MEM_ADDR_WIDTH) when (dir_pixel_column <= 111 and dir_pixel_column > 103) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(509, MEM_ADDR_WIDTH) when (dir_pixel_column <= 119 and dir_pixel_column > 111) and (dir_pixel_row = 1) else
+						conv_std_logic_vector(510, MEM_ADDR_WIDTH);
 						
   
-  char_value <= 	o"04" when char_address = conv_std_logic_vector(501, MEM_ADDR_WIDTH) else
-						o"01" when char_address = conv_std_logic_vector(502, MEM_ADDR_WIDTH) else
-						o"15" when char_address = conv_std_logic_vector(503, MEM_ADDR_WIDTH) else
-						o"12" when char_address = conv_std_logic_vector(504, MEM_ADDR_WIDTH) else
-						o"01" when char_address = conv_std_logic_vector(505, MEM_ADDR_WIDTH) else
-						o"16" when char_address = conv_std_logic_vector(506, MEM_ADDR_WIDTH) else
-						o"40" when char_address = conv_std_logic_vector(507, MEM_ADDR_WIDTH) else
-						o"07" when char_address = conv_std_logic_vector(508, MEM_ADDR_WIDTH) else
-						o"14" when char_address = conv_std_logic_vector(509, MEM_ADDR_WIDTH) else
-						o"01" when char_address = conv_std_logic_vector(510, MEM_ADDR_WIDTH) else
-						o"15" when char_address = conv_std_logic_vector(511, MEM_ADDR_WIDTH) else
-						o"17" when char_address = conv_std_logic_vector(512, MEM_ADDR_WIDTH) else
-						o"03" when char_address = conv_std_logic_vector(513, MEM_ADDR_WIDTH) else
-						o"11" when char_address = conv_std_logic_vector(514, MEM_ADDR_WIDTH) else
-						o"03" when char_address = conv_std_logic_vector(515, MEM_ADDR_WIDTH) else
+  char_value <= 	o"04" when char_address = conv_std_logic_vector(495, MEM_ADDR_WIDTH) else
+						o"01" when char_address = conv_std_logic_vector(496, MEM_ADDR_WIDTH) else
+						o"15" when char_address = conv_std_logic_vector(497, MEM_ADDR_WIDTH) else
+						o"12" when char_address = conv_std_logic_vector(498, MEM_ADDR_WIDTH) else
+						o"01" when char_address = conv_std_logic_vector(499, MEM_ADDR_WIDTH) else
+						o"16" when char_address = conv_std_logic_vector(500, MEM_ADDR_WIDTH) else
+						o"40" when char_address = conv_std_logic_vector(501, MEM_ADDR_WIDTH) else
+						o"07" when char_address = conv_std_logic_vector(502, MEM_ADDR_WIDTH) else
+						o"14" when char_address = conv_std_logic_vector(503, MEM_ADDR_WIDTH) else
+						o"01" when char_address = conv_std_logic_vector(504, MEM_ADDR_WIDTH) else
+						o"15" when char_address = conv_std_logic_vector(505, MEM_ADDR_WIDTH) else
+						o"17" when char_address = conv_std_logic_vector(506, MEM_ADDR_WIDTH) else
+						o"03" when char_address = conv_std_logic_vector(507, MEM_ADDR_WIDTH) else
+						o"11" when char_address = conv_std_logic_vector(508, MEM_ADDR_WIDTH) else
+						o"03" when char_address = conv_std_logic_vector(509, MEM_ADDR_WIDTH) else
 						o"40";
   
   -- koristeci signale realizovati logiku koja pise po GRAPH_MEM
