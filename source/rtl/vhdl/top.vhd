@@ -157,6 +157,10 @@ architecture rtl of top is
   signal dir_pixel_column    : std_logic_vector(10 downto 0);
   signal dir_pixel_row       : std_logic_vector(10 downto 0);
 
+  signal char_counter			: std_logic_vector(23 downto 0);
+  signal char_pomjerac			: std_logic_vector(12 downto 0);
+  signal pixel_counter			: std_logic_vector(23 downto 0);
+  signal pixel_pomjerac			: std_logic_vector(12 downto 0);
 begin
 
   -- calculate message lenght from font size
@@ -169,7 +173,7 @@ begin
   
   -- removed to inputs pin
   direct_mode <= '0';
-  display_mode     <= "10";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
+  display_mode     <= "01";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
   
   font_size        <= x"1";
   show_frame       <= '0';
@@ -285,39 +289,69 @@ begin
   
   char_we <= '1';
   
-  char_address <= conv_std_logic_vector(495, MEM_ADDR_WIDTH) when (dir_pixel_column <= 7 and dir_pixel_column > 0) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(496, MEM_ADDR_WIDTH) when (dir_pixel_column <= 15 and dir_pixel_column > 7) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(497, MEM_ADDR_WIDTH) when (dir_pixel_column <= 23 and dir_pixel_column > 15) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(498, MEM_ADDR_WIDTH) when (dir_pixel_column <= 31 and dir_pixel_column > 23) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(499, MEM_ADDR_WIDTH) when (dir_pixel_column <= 39 and dir_pixel_column > 31) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(500, MEM_ADDR_WIDTH) when (dir_pixel_column <= 47 and dir_pixel_column > 39) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(501, MEM_ADDR_WIDTH) when (dir_pixel_column <= 55 and dir_pixel_column > 47) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(502, MEM_ADDR_WIDTH) when (dir_pixel_column <= 63 and dir_pixel_column > 55) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(503, MEM_ADDR_WIDTH) when (dir_pixel_column <= 71 and dir_pixel_column > 63) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(504, MEM_ADDR_WIDTH) when (dir_pixel_column <= 79 and dir_pixel_column > 71) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(505, MEM_ADDR_WIDTH) when (dir_pixel_column <= 87 and dir_pixel_column > 79) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(506, MEM_ADDR_WIDTH) when (dir_pixel_column <= 95 and dir_pixel_column > 87) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(507, MEM_ADDR_WIDTH) when (dir_pixel_column <= 103 and dir_pixel_column > 95) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(508, MEM_ADDR_WIDTH) when (dir_pixel_column <= 111 and dir_pixel_column > 103) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(509, MEM_ADDR_WIDTH) when (dir_pixel_column <= 119 and dir_pixel_column > 111) and (dir_pixel_row = 1) else
-						conv_std_logic_vector(510, MEM_ADDR_WIDTH);
+  process(pix_clock_s, reset_n_i) begin
+		if(reset_n_i = '0') then
+			char_address <= conv_std_logic_vector(0, MEM_ADDR_WIDTH);
+		elsif (pix_clock_s'event and pix_clock_s = '1') then
+			if(char_address = X"12BF") then
+				char_address <= conv_std_logic_vector(0, MEM_ADDR_WIDTH);
+			else
+				char_address <= char_address + 1;
+			end if;
+		end if;
+  end process;
+  
+  process(pix_clock_s, reset_n_i) begin
+		if(reset_n_i = '0') then
+			char_counter <= (others => '0');
+			char_pomjerac <= (others => '0');
+		elsif (pix_clock_s'event and pix_clock_s = '1') then
+			if(char_counter = 2000000) then
+				char_counter <= (others => '0');
+				if(char_pomjerac < 500) then
+					char_pomjerac <= char_pomjerac + 1;
+				else
+					char_pomjerac <= (others => '0');
+				end if;
+			else
+				char_counter <= char_counter + 1;
+			end if;
+		end if;
+  end process;
+  
+--  char_address <= conv_std_logic_vector(495, MEM_ADDR_WIDTH) when (dir_pixel_column <= 7 and dir_pixel_column > 0) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(496, MEM_ADDR_WIDTH) when (dir_pixel_column <= 15 and dir_pixel_column > 7) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(497, MEM_ADDR_WIDTH) when (dir_pixel_column <= 23 and dir_pixel_column > 15) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(498, MEM_ADDR_WIDTH) when (dir_pixel_column <= 31 and dir_pixel_column > 23) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(499, MEM_ADDR_WIDTH) when (dir_pixel_column <= 39 and dir_pixel_column > 31) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(500, MEM_ADDR_WIDTH) when (dir_pixel_column <= 47 and dir_pixel_column > 39) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(501, MEM_ADDR_WIDTH) when (dir_pixel_column <= 55 and dir_pixel_column > 47) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(502, MEM_ADDR_WIDTH) when (dir_pixel_column <= 63 and dir_pixel_column > 55) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(503, MEM_ADDR_WIDTH) when (dir_pixel_column <= 71 and dir_pixel_column > 63) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(504, MEM_ADDR_WIDTH) when (dir_pixel_column <= 79 and dir_pixel_column > 71) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(505, MEM_ADDR_WIDTH) when (dir_pixel_column <= 87 and dir_pixel_column > 79) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(506, MEM_ADDR_WIDTH) when (dir_pixel_column <= 95 and dir_pixel_column > 87) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(507, MEM_ADDR_WIDTH) when (dir_pixel_column <= 103 and dir_pixel_column > 95) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(508, MEM_ADDR_WIDTH) when (dir_pixel_column <= 111 and dir_pixel_column > 103) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(509, MEM_ADDR_WIDTH) when (dir_pixel_column <= 119 and dir_pixel_column > 111) and (dir_pixel_row = 1) else
+--						conv_std_logic_vector(510, MEM_ADDR_WIDTH);
 						
   
-  char_value <= 	o"04" when char_address = conv_std_logic_vector(495, MEM_ADDR_WIDTH) else
-						o"01" when char_address = conv_std_logic_vector(496, MEM_ADDR_WIDTH) else
-						o"15" when char_address = conv_std_logic_vector(497, MEM_ADDR_WIDTH) else
-						o"12" when char_address = conv_std_logic_vector(498, MEM_ADDR_WIDTH) else
-						o"01" when char_address = conv_std_logic_vector(499, MEM_ADDR_WIDTH) else
-						o"16" when char_address = conv_std_logic_vector(500, MEM_ADDR_WIDTH) else
-						o"40" when char_address = conv_std_logic_vector(501, MEM_ADDR_WIDTH) else
-						o"07" when char_address = conv_std_logic_vector(502, MEM_ADDR_WIDTH) else
-						o"14" when char_address = conv_std_logic_vector(503, MEM_ADDR_WIDTH) else
-						o"01" when char_address = conv_std_logic_vector(504, MEM_ADDR_WIDTH) else
-						o"15" when char_address = conv_std_logic_vector(505, MEM_ADDR_WIDTH) else
-						o"17" when char_address = conv_std_logic_vector(506, MEM_ADDR_WIDTH) else
-						o"03" when char_address = conv_std_logic_vector(507, MEM_ADDR_WIDTH) else
-						o"11" when char_address = conv_std_logic_vector(508, MEM_ADDR_WIDTH) else
-						o"03" when char_address = conv_std_logic_vector(509, MEM_ADDR_WIDTH) else
+  char_value <= 	o"04" when char_address = (char_pomjerac + 0) else
+						o"01" when char_address = (char_pomjerac + 1) else
+						o"15" when char_address = (char_pomjerac + 2) else
+						o"12" when char_address = (char_pomjerac + 3) else
+						o"01" when char_address = (char_pomjerac + 4) else
+						o"16" when char_address = (char_pomjerac + 5) else
+						o"40" when char_address = (char_pomjerac + 6) else
+						o"07" when char_address = (char_pomjerac + 7) else
+						o"14" when char_address = (char_pomjerac + 8) else
+						o"01" when char_address = (char_pomjerac + 9) else
+						o"15" when char_address = (char_pomjerac + 10) else
+						o"17" when char_address = (char_pomjerac + 11) else
+						o"03" when char_address = (char_pomjerac + 12) else
+						o"11" when char_address = (char_pomjerac + 13) else
+						o"03" when char_address = (char_pomjerac + 14) else
 						o"40";
   
   -- koristeci signale realizovati logiku koja pise po GRAPH_MEM
@@ -327,65 +361,104 @@ begin
   
   pixel_we <= '1';
   
-  pixel_address <= conv_std_logic_vector(2225, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 100) else
-						conv_std_logic_vector(2245, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 101) else
-						conv_std_logic_vector(2265, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 102) else
-						conv_std_logic_vector(2285, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 103) else
-						conv_std_logic_vector(2305, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 104) else
-						conv_std_logic_vector(2325, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 105) else
-						conv_std_logic_vector(2345, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 106) else
-						conv_std_logic_vector(2365, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 107) else
-						conv_std_logic_vector(2385, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 108) else
-						conv_std_logic_vector(2405, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 109) else
-						conv_std_logic_vector(2425, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 110) else
-						conv_std_logic_vector(2445, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 111) else
-						conv_std_logic_vector(2465, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 112) else
-						conv_std_logic_vector(2485, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 113) else
-						conv_std_logic_vector(2505, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 114) else
-						conv_std_logic_vector(2525, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 115) else
-						conv_std_logic_vector(2545, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 116) else
-						conv_std_logic_vector(2565, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 117) else
-						conv_std_logic_vector(2585, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 118) else
-						conv_std_logic_vector(2605, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 119) else
-						conv_std_logic_vector(2625, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 120) else
-						conv_std_logic_vector(2645, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 121) else
-						conv_std_logic_vector(2665, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 122) else
-						conv_std_logic_vector(2685, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 123) else
-						conv_std_logic_vector(2705, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 124) else
-						conv_std_logic_vector(2725, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 125) else
-						conv_std_logic_vector(2745, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 126) else
-						conv_std_logic_vector(2765, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 127) else
-						conv_std_logic_vector(2785, GRAPH_MEM_ADDR_WIDTH);
+  process(pix_clock_s, reset_n_i) begin
+		if(reset_n_i = '0') then
+			pixel_address <= conv_std_logic_vector(0, GRAPH_MEM_ADDR_WIDTH);
+		elsif (pix_clock_s'event and pix_clock_s = '1') then
+			if(pixel_address = X"4AFFF") then
+				pixel_address <= conv_std_logic_vector(0, GRAPH_MEM_ADDR_WIDTH);
+			else
+				pixel_address <= pixel_address + 1;
+			end if;
+		end if;
+  end process;
+  
+  process(pix_clock_s, reset_n_i) begin
+		if(reset_n_i = '0') then
+			pixel_counter <= (others => '0');
+			pixel_pomjerac <= (others => '0');
+		elsif (pix_clock_s'event and pix_clock_s = '1') then
+			if(pixel_counter = 2000000) then
+				pixel_counter <= (others => '0');
+				if(pixel_pomjerac < 500) then
+					pixel_pomjerac <= pixel_pomjerac + 1;
+				else
+					pixel_pomjerac <= (others => '0');
+				end if;
+			else
+				pixel_counter <= pixel_counter + 1;
+			end if;
+		end if;
+  end process;
+  
+--  pixel_address <= conv_std_logic_vector(2225, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 100) else
+--						conv_std_logic_vector(2245, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 101) else
+--						conv_std_logic_vector(2265, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 102) else
+--						conv_std_logic_vector(2285, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 103) else
+--						conv_std_logic_vector(2305, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 104) else
+--						conv_std_logic_vector(2325, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 105) else
+--						conv_std_logic_vector(2345, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 106) else
+--						conv_std_logic_vector(2365, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 107) else
+--						conv_std_logic_vector(2385, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 108) else
+--						conv_std_logic_vector(2405, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 109) else
+--						conv_std_logic_vector(2425, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 110) else
+--						conv_std_logic_vector(2445, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 111) else
+--						conv_std_logic_vector(2465, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 112) else
+--						conv_std_logic_vector(2485, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 113) else
+--						conv_std_logic_vector(2505, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 114) else
+--						conv_std_logic_vector(2525, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 115) else
+--						conv_std_logic_vector(2545, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 116) else
+--						conv_std_logic_vector(2565, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 117) else
+--						conv_std_logic_vector(2585, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 118) else
+--						conv_std_logic_vector(2605, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 119) else
+--						conv_std_logic_vector(2625, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 120) else
+--						conv_std_logic_vector(2645, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 121) else
+--						conv_std_logic_vector(2665, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 122) else
+--						conv_std_logic_vector(2685, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 123) else
+--						conv_std_logic_vector(2705, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 124) else
+--						conv_std_logic_vector(2725, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 125) else
+--						conv_std_logic_vector(2745, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 126) else
+--						conv_std_logic_vector(2765, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 127) else
+--						conv_std_logic_vector(2785, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 128) else
+--						conv_std_logic_vector(2805, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 129) else
+--						conv_std_logic_vector(2825, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 130) else
+--						conv_std_logic_vector(2845, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 131) else
+--						conv_std_logic_vector(2865, GRAPH_MEM_ADDR_WIDTH);
+
 						
-  pixel_value <= 	"11111111111111111111111111111111" when pixel_address = conv_std_logic_vector(2225, GRAPH_MEM_ADDR_WIDTH) else
-						"11111111111111111111111111111111" when pixel_address = conv_std_logic_vector(2245, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2265, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2285, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2305, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2325, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2345, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2365, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2385, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2405, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2425, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2445, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2465, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2485, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2505, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2525, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2545, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2565, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2585, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2605, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2625, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2645, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2665, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2685, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2705, GRAPH_MEM_ADDR_WIDTH) else
-						"11000000000000000000000000000111" when pixel_address = conv_std_logic_vector(2725, GRAPH_MEM_ADDR_WIDTH) else
-						"11111111111111111111111111111111" when pixel_address = conv_std_logic_vector(2745, GRAPH_MEM_ADDR_WIDTH) else
-						"11111111111111111111111111111111" when pixel_address = conv_std_logic_vector(2765, GRAPH_MEM_ADDR_WIDTH) else
-						"00000000000000000000000000000000";
+  pixel_value <= 	(others => '1') when pixel_address = (pixel_pomjerac + 0) else
+						(others => '1') when pixel_address = (pixel_pomjerac + 20) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 40) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 60) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 80) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 100) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 120) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 140) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 160) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 180) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 200) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 220) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 240) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 260) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 280) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 300) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 320) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 340) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 360) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 380) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 400) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 420) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 440) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 460) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 480) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 500) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 520) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 540) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 560) else
+						"11000000000000000000000000000111" when pixel_address = (pixel_pomjerac + 580) else
+						(others => '1') when pixel_address = (pixel_pomjerac + 600) else
+						(others => '1') when pixel_address = (pixel_pomjerac + 620) else
+						(others => '0');
   
   
 end rtl;
