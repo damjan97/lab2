@@ -173,7 +173,7 @@ begin
   
   -- removed to inputs pin
   direct_mode <= '0';
-  display_mode     <= "01";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
+  display_mode     <= "11";  -- 01 - text mode, 10 - graphics mode, 11 - text & graphics
   
   font_size        <= x"1";
   show_frame       <= '0';
@@ -306,9 +306,9 @@ begin
 			char_counter <= (others => '0');
 			char_pomjerac <= (others => '0');
 		elsif (pix_clock_s'event and pix_clock_s = '1') then
-			if(char_counter = 2000000) then
+			if(char_counter = 4000000) then
 				char_counter <= (others => '0');
-				if(char_pomjerac < 500) then
+				if(char_pomjerac < 1000) then
 					char_pomjerac <= char_pomjerac + 1;
 				else
 					char_pomjerac <= (others => '0');
@@ -318,23 +318,6 @@ begin
 			end if;
 		end if;
   end process;
-  
---  char_address <= conv_std_logic_vector(495, MEM_ADDR_WIDTH) when (dir_pixel_column <= 7 and dir_pixel_column > 0) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(496, MEM_ADDR_WIDTH) when (dir_pixel_column <= 15 and dir_pixel_column > 7) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(497, MEM_ADDR_WIDTH) when (dir_pixel_column <= 23 and dir_pixel_column > 15) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(498, MEM_ADDR_WIDTH) when (dir_pixel_column <= 31 and dir_pixel_column > 23) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(499, MEM_ADDR_WIDTH) when (dir_pixel_column <= 39 and dir_pixel_column > 31) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(500, MEM_ADDR_WIDTH) when (dir_pixel_column <= 47 and dir_pixel_column > 39) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(501, MEM_ADDR_WIDTH) when (dir_pixel_column <= 55 and dir_pixel_column > 47) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(502, MEM_ADDR_WIDTH) when (dir_pixel_column <= 63 and dir_pixel_column > 55) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(503, MEM_ADDR_WIDTH) when (dir_pixel_column <= 71 and dir_pixel_column > 63) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(504, MEM_ADDR_WIDTH) when (dir_pixel_column <= 79 and dir_pixel_column > 71) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(505, MEM_ADDR_WIDTH) when (dir_pixel_column <= 87 and dir_pixel_column > 79) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(506, MEM_ADDR_WIDTH) when (dir_pixel_column <= 95 and dir_pixel_column > 87) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(507, MEM_ADDR_WIDTH) when (dir_pixel_column <= 103 and dir_pixel_column > 95) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(508, MEM_ADDR_WIDTH) when (dir_pixel_column <= 111 and dir_pixel_column > 103) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(509, MEM_ADDR_WIDTH) when (dir_pixel_column <= 119 and dir_pixel_column > 111) and (dir_pixel_row = 1) else
---						conv_std_logic_vector(510, MEM_ADDR_WIDTH);
 						
   
   char_value <= 	o"04" when char_address = (char_pomjerac + 0) else
@@ -378,9 +361,9 @@ begin
 			pixel_counter <= (others => '0');
 			pixel_pomjerac <= (others => '0');
 		elsif (pix_clock_s'event and pix_clock_s = '1') then
-			if(pixel_counter = 2000000) then
+			if(pixel_counter = 4000000) then
 				pixel_counter <= (others => '0');
-				if(pixel_pomjerac < 500) then
+				if(pixel_pomjerac < 1000) then
 					pixel_pomjerac <= pixel_pomjerac + 1;
 				else
 					pixel_pomjerac <= (others => '0');
@@ -390,40 +373,7 @@ begin
 			end if;
 		end if;
   end process;
-  
---  pixel_address <= conv_std_logic_vector(2225, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 100) else
---						conv_std_logic_vector(2245, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 101) else
---						conv_std_logic_vector(2265, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 102) else
---						conv_std_logic_vector(2285, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 103) else
---						conv_std_logic_vector(2305, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 104) else
---						conv_std_logic_vector(2325, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 105) else
---						conv_std_logic_vector(2345, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 106) else
---						conv_std_logic_vector(2365, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 107) else
---						conv_std_logic_vector(2385, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 108) else
---						conv_std_logic_vector(2405, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 109) else
---						conv_std_logic_vector(2425, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 110) else
---						conv_std_logic_vector(2445, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 111) else
---						conv_std_logic_vector(2465, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 112) else
---						conv_std_logic_vector(2485, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 113) else
---						conv_std_logic_vector(2505, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 114) else
---						conv_std_logic_vector(2525, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 115) else
---						conv_std_logic_vector(2545, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 116) else
---						conv_std_logic_vector(2565, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 117) else
---						conv_std_logic_vector(2585, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 118) else
---						conv_std_logic_vector(2605, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 119) else
---						conv_std_logic_vector(2625, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 120) else
---						conv_std_logic_vector(2645, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 121) else
---						conv_std_logic_vector(2665, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 122) else
---						conv_std_logic_vector(2685, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 123) else
---						conv_std_logic_vector(2705, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 124) else
---						conv_std_logic_vector(2725, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 125) else
---						conv_std_logic_vector(2745, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 126) else
---						conv_std_logic_vector(2765, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 127) else
---						conv_std_logic_vector(2785, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 128) else
---						conv_std_logic_vector(2805, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 129) else
---						conv_std_logic_vector(2825, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 130) else
---						conv_std_logic_vector(2845, GRAPH_MEM_ADDR_WIDTH) when (dir_pixel_column <= 32 and dir_pixel_column > 0) and (dir_pixel_row = 131) else
---						conv_std_logic_vector(2865, GRAPH_MEM_ADDR_WIDTH);
+
 
 						
   pixel_value <= 	(others => '1') when pixel_address = (pixel_pomjerac + 0) else
